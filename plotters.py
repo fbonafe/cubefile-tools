@@ -20,7 +20,7 @@ def plotxy(coorx,coory,x,y,z,filename):
     yi = np.linspace(y.min(),y.max(),npts)
     zi = griddata(x, y, z, xi, yi, interp='linear')
     maxdim = max(np.abs(x).max(),np.abs(y).max())
-    densmax = np.abs(z).max()/2
+    densmax = np.abs(z).max()/10
     dbond = 1.5
     
     figure = plt.figure(figsize=(20, 16))

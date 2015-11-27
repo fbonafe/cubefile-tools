@@ -4,6 +4,7 @@ and analize it.
 """
 
 import sys
+import numpy as np
 
 def readCube(filename):
     
@@ -129,3 +130,36 @@ def plotXY(CubeFile,isovalues):
             dens.append(intdens)
 #    CubeFile.isovals = aux
     return Grid(xs,ys,dens)
+
+def transDipole(CubeFile1,CubeFile2):
+
+    bohr_to_angst = 0.529177
+    iso1 = CubeFile1.isovals
+    iso1.reverse()
+    iso2 = CubeFile2.isovals
+    iso2.reverse()
+    transDipArr = []
+    for ix in range(CubeFile1.nx):
+        for iy in range(CubeFile1.ny):
+            for iz in range(CubeFile1.nz):
+               x = bohr_to_angst * (CubeFile1.x0 + ix * CubeFile1.dx)
+               y = bohr_to_angst * (CubeFile1.y0 + iy * CubeFile1.dy)
+               z = bohr_to_angst * (CubeFile1.z0 + iz * CubeFile1.dz)
+               prod = iso1.pop() * iso2.pop()
+               transDip = prod**2 * (x**2 + y**2 + z**2)
+               transDipArr.append(transDip)
+    transDipArr.reverse()
+    return transDipArr
+    
+def writeDens(a,fileout):
+    fmt='15.8e'
+    asTxtLst = map(lambda val: format(val, fmt), a)
+    size = len(asTxtLst)
+    ncol = 4
+    f = open(fileout, 'w+')
+    for i in range(size/ncol):
+        f.write(' '.join(asTxtLst[i*ncol:(i+1)*ncol])+'\n')
+    if ncol*(size/ncol) < size:
+        f.write(' '.join(asTxtLst[ncol*(size/ncol):])+'\n')
+    f.close()
+    return 0
