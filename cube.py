@@ -5,9 +5,9 @@ and analize it.
 
 import sys
 import numpy as np
+from matplotlib.mlab import griddata
 
 def readCube(filename):
-    
     class CubeFile:
         def __init__(self,coordsx,coordsy,coordsz,x0,y0,z0,pointsx,pointsy,pointsz,voldx,voldy,voldz,isovals):
             self.x0=x0
@@ -90,14 +90,31 @@ def readCube(filename):
             
     return CubeFile(coords_x,coords_y,coords_z,x_origin,y_origin,z_origin,points_x,points_y,points_z,vol_dx,vol_dy,vol_dz,isovalues)
     
-def genGrid(CubeFile):
+def genGrid(filename):
     class Grid:
         def __init__(self,x,y,z,isoval):    
             self.x=x
             self.y=y
             self.z=z
-            self.isoval=isoval
+            self.isovals=isoval
             
+        def __add__(self,other): #untested
+            result = self
+            result.isovals = self.isovals + other.isovals
+            return result
+        
+        def __sub__(self,other): #untested
+            if self.isovals.size == other.isovals.size:
+                result = self
+                result.isovals = self.isovals - other.isovals
+                return result
+            else:
+                print 'Error: not equal number of isovalues, keeping first variable as output' 
+                return self
+    
+    CubeFile = readCube(filename)
+    Coords = np.array([CubeFile.coords_x,CubeFile.coords_y,CubeFile.coords_z])
+    
     bohr_to_angst = 0.529177
     xs = []
     ys = []
@@ -111,7 +128,7 @@ def genGrid(CubeFile):
                 xs.append(x)
                 ys.append(y)
                 zs.append(z)
-    return Grid(xs,ys,zs,CubeFile.isovals)
+    return Grid(np.array(xs),np.array(ys),np.array(zs),np.array(CubeFile.isovals)),Coords
     
 def plotXY(CubeFile,isovalues):
     class Grid:

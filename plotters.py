@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 #from scipy.interpolate import griddata
 from matplotlib.mlab import griddata
 
-def plotxy(coorx,coory,x,y,z,filename):
+def plotXY(coorx,coory,x,y,z,filename):
     x = np.array(x)
     y = np.array(y)
     z = np.array(z)
@@ -42,5 +42,31 @@ def plotxy(coorx,coory,x,y,z,filename):
     #clb.ax.set_ylabel('electrostatic potential / $V$', fontsize=18)
     return figure
 
-def plotcurrent(x,y,z):
-    return 0 #unfinished
+def plotPlanarMol(coorx,coory,dbond):
+    coorx = np.array(coorx)
+    coory = np.array(coory)
+    plt.scatter(coorx,coory)
+    for i in range(coorx.shape[0]):
+        for j in range(coory.shape[0]):
+            dreal = np.sqrt((coorx[j]-coorx[i])**2+(coory[j]-coory[i])**2)
+            if dreal <= dbond:
+                plt.plot([coorx[i],coorx[j]],[coory[i],coory[j]], color="0.5", lw=3.5)
+
+def plotCurrent(ax,x,y,ix,iy,coords):
+    p = np.sqrt(ix**2+iy**2)
+    ax.streamplot(x, y, ix, iy, color=p, density=2, cmap='Blues', linewidth=5*np.hypot(ix,iy)/np.hypot(ix,iy).max(), arrowsize=2)
+    ax.set_xlim([min(coords[0])-0.5,max(coords[0])+0.5])
+    ax.set_ylim([min(coords[1])-0.5,max(coords[1])+0.5])
+    ax.set(aspect=1)
+    
+def plotDens(ax,x,y,dens):
+    densmax = np.abs(dens).max()
+    ax.contourf(x,y,dens,100,cmap=plt.cm.RdBu,vmax=densmax,vmin=-densmax)
+    
+def plotCurrentBlack(ax,x,y,ix,iy,coords):
+    p = np.sqrt(ix**2+iy**2)
+    ax.streamplot(x, y, ix, iy, density=2, color='k', linewidth=5*np.hypot(ix,iy)/np.hypot(ix,iy).max(), arrowsize=2)
+    ax.set_xlim([min(coords[0])-0.5,max(coords[0])+0.5])
+    ax.set_ylim([min(coords[1])-0.5,max(coords[1])+0.5])
+    ax.set(aspect=1)
+
