@@ -24,6 +24,17 @@ def readCube(filename):
             self.dz=voldz
             self.dv=voldx*voldy*voldz
             self.isovals=isovals
+         
+        def __add__(self,other): #untested
+            result = self
+            result.isovals = self.isovals + other.isovals
+            return result
+        
+        def __add__(self,other): #untested
+            result = self
+            result.isovals = self.isovals - other.isovals
+            return result
+        
     
     f = open(filename, "r")
     bohr_to_angst = 0.529177
@@ -94,12 +105,12 @@ def genGrid(CubeFile):
     for ix in range(CubeFile.nx):
         for iy in range(CubeFile.ny):
             for iz in range(CubeFile.nz):
-               x = bohr_to_angst * (CubeFile.x0 + ix * CubeFile.dx)
-               y = bohr_to_angst * (CubeFile.y0 + iy * CubeFile.dy)
-               z = bohr_to_angst * (CubeFile.z0 + iz * CubeFile.dz)
-               xs.append(x)
-               ys.append(y)
-               zs.append(z)
+                x = bohr_to_angst * (CubeFile.x0 + ix * CubeFile.dx)
+                y = bohr_to_angst * (CubeFile.y0 + iy * CubeFile.dy)
+                z = bohr_to_angst * (CubeFile.z0 + iz * CubeFile.dz)
+                xs.append(x)
+                ys.append(y)
+                zs.append(z)
     return Grid(xs,ys,zs,CubeFile.isovals)
     
 def plotXY(CubeFile,isovalues):
@@ -122,8 +133,8 @@ def plotXY(CubeFile,isovalues):
             y = bohr_to_angst * (CubeFile.y0 + iy * CubeFile.dy)
             intdens=0.
             for iz in range(CubeFile.nz):
-               val = isovalues.pop()
-               intdens += val
+                val = isovalues.pop()
+                intdens += val
             intdens=intdens*CubeFile.dz
             xs.append(x)
             ys.append(y)

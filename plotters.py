@@ -41,3 +41,6 @@ def plotxy(coorx,coory,x,y,z,filename):
     figure = plt.savefig(filename+'.eps')
     #clb.ax.set_ylabel('electrostatic potential / $V$', fontsize=18)
     return figure
+
+def plotcurrent(x,y,z):
+    return 0 #unfinished
