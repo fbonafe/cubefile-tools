@@ -179,15 +179,30 @@ def transDipole(CubeFile1,CubeFile2):
     transDipArr.reverse()
     return transDipArr
     
-def writeDens(a,fileout):
+def writeDens(a,filein,fileout):
     fmt='15.8e'
     asTxtLst = map(lambda val: format(val, fmt), a)
     size = len(asTxtLst)
     ncol = 4
-    f = open(fileout, 'w+')
+    f1 = open(filein, 'r')
+    f2 = open(fileout, 'w+')
+    
+    l = f1.readline()
+    f2.write(l)
+    l = f1.readline()
+    f2.write(l) 
+    l = f1.readline()
+    f2.write(l)
+    l2 = l.split()
+    natoms = int(l2[0])
+    for n in range(natoms+3):
+        l = f1.readline()
+        f2.write(l)
+    
     for i in range(size/ncol):
-        f.write(' '.join(asTxtLst[i*ncol:(i+1)*ncol])+'\n')
+        f2.write(' '.join(asTxtLst[i*ncol:(i+1)*ncol])+'\n')
     if ncol*(size/ncol) < size:
-        f.write(' '.join(asTxtLst[ncol*(size/ncol):])+'\n')
-    f.close()
+        f2.write(' '.join(asTxtLst[ncol*(size/ncol):])+'\n')
+    f1.close()
+    f2.close()
     return 0
