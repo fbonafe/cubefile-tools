@@ -176,7 +176,6 @@ def transDipole(CubeFile1,CubeFile2):
                prod = iso1.pop() * iso2.pop()
                transDip = prod**2 * (x**2 + y**2 + z**2)
                transDipArr.append(transDip)
-    transDipArr.reverse()
     return transDipArr
     
 def writeDens(a,filein,fileout):
